@@ -1,0 +1,68 @@
+---
+
+- name: ensure server is fully initalized
+  hosts: all
+  tasks:
+    - name: Wait 300 seconds for port 22 to become open and contain "OpenSSH"
+      wait_for:
+        port: 22
+        host: '{{ (ansible_ssh_host|default(ansible_host))|default(inventory_hostname) }}'
+        search_regex: OpenSSH
+        delay: 10
+      vars:
+        ansible_connection: local
+    
+- name: install node js with npm 
+  hosts: all
+  become: true
+  tasks:
+    - name: install nodejs 
+      yum:
+        name: nodejs
+        state: latest
+
+
+- name: create linux user for node application
+  hosts: all
+  become: true 
+  vars_files:
+    - node-app-vars.yaml  
+  tasks:
+    - name: create the user
+      user:
+        name: "{{linux_user}}"
+        groups: adm
+
+- name: deploy nodejs application
+  hosts: all
+  become_user: "{{linux_user}}"  
+  vars_files:
+    - node-app-vars.yaml
+  tasks:
+    - name: copy and unpack the nodejs application
+      unarchive:
+        src: simple-nodejs/nodejs-app-{{version}}.tgz
+        dest: "{{destination}}"
+    
+    - name: install dependencies in package.json
+      npm:
+        path: "{{destination}}/package"
+    
+    - name: start the application
+      command: 
+        chdir: "{{destination}}/package/app"
+        cmd: node server &
+      async: 1000
+      poll: 0  
+
+
+- name: verify the application is running
+  hosts: all
+  tasks:
+    - name: ensure application is running successfully
+      shell: ps aux | grep node
+      register: app_state
+    
+    - name: print the app state  
+      debug:  msg={{app_state.stdout_lines}}        
+     
