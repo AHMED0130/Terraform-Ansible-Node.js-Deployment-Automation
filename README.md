@@ -4,8 +4,8 @@
 
 This project automates the **provisioning, configuration, and deployment** of Node.js applications on **AWS EC2 instances** using **Terraform** and **Ansible**.
 
-✅ Uses **Terraform** to orchestrate infrastructure setup
-✅ Uses **Ansible** to configure EC2 instances and deploy the Node.js app
+✅ Uses **Terraform** to orchestrate infrastructure setup <br />
+✅ Uses **Ansible** to configure EC2 instances and deploy the Node.js app <br />
 
 ---
 
