@@ -24,10 +24,10 @@ project/
 
 ## 💡 Features
 
-✨ Automates EC2 provisioning
-✨ Configures server environment for Node.js
-✨ Deploys application seamlessly
-✨ Modular and reusable infrastructure code
+✨ Automates EC2 provisioning <br />
+✨ Configures server environment for Node.js <br />
+✨ Deploys application seamlessly  <br />
+✨ Modular and reusable infrastructure code <br />
 
 ---
 
